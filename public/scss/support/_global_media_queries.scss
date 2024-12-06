@@ -1,0 +1,84 @@
+// @mixin custom-max($breakpoint) {
+//     @media (max-width: #{$breakpoint}) {
+//         @content;
+//     }
+// }
+
+// @mixin custom-min($breakpoint) {
+//     @media (min-width: #{$breakpoint}) {
+//         @content;
+//     }
+// }
+
+// @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+
+//     /* 480 ss-phone */
+//     html {
+//         font-size: 60%;
+//     }
+// }
+
+// @media only screen and (min-width: 480px) and (max-width: 640px) {
+
+//     /* 640 s-phone */
+//     html {
+//         font-size: 60%;
+//     }
+// }
+
+// @media only screen and (min-width: 640px) and (max-width: 768px) {
+
+//     /* 760 s-phone */
+//     html {
+//         font-size: 60%;
+//     }
+// }
+
+// @media only screen and (min-width: 768px) and (max-width: 800px) {
+
+//     /* 800 phone */
+//     html {
+//         font-size: 75%;
+//     }
+// }
+
+// @media only screen and (min-width: 800px) and (max-width: 900px) {
+
+//     /* 900 b-phone */
+//     html {
+//         font-size: 75%;
+//     }
+// }
+
+// @media only screen and (min-width: 900px) and (max-width: 1000px) {
+
+//     /* 1000 b-phone */
+//     html {
+//         font-size: 75%;
+//     }
+// }
+
+// @media only screen and (min-width: 1000px) and (max-width: 1200px) {
+
+//     /* 1200 tab-land */
+//     html {
+//         font-size: 83%;
+//     }
+// }
+
+// @media only screen and (min-width: 1024px) and (max-height: 768px) {
+
+//     html {
+//         font-size: 80%;
+//     }
+// }
+
+// @media only screen and (min-width: 1200px) and (max-width: 1440px) {
+
+//     /* 1200 tab-land */
+//     html {
+//         font-size: 100%;
+//     }
+// }
+
+

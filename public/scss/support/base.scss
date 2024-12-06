@@ -1,0 +1,44 @@
+@use "./variables" as *;
+@use "./typology" as *;
+@use "./global_media_queries" as *;
+
+.image-wrapper-fill-width,
+.iwfw {
+	svg {
+		height: auto !important;
+		width: 100% !important;
+	}
+
+	img {
+		height: auto !important;
+		width: 100% !important;
+	}
+}
+
+.image-wrapper-preserve-aspect-ratio,
+.iwpar {
+	svg {
+		height: auto !important;
+		width: auto !important;
+		max-height: 100% !important;
+		max-width: 100% !important;
+	}
+
+	img {
+		height: auto !important;
+		width: auto !important;
+		max-height: 100% !important;
+		max-width: 100% !important;
+	}
+}
+
+.strip-input-default-styles {
+	padding: 0;
+	margin: 0;
+	border: none;
+	outline: 0;
+
+	&:focus {
+		outline: none;
+	}
+}
