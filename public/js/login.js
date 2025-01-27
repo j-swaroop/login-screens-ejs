@@ -57,4 +57,6 @@ showPassword.addEventListener("click", () => {
 
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  console.log(userData);
 });

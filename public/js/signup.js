@@ -7,6 +7,7 @@ const passwordField = document.getElementById("password");
 const emailField = document.getElementById("email");
 const phoneField = document.getElementById("phone");
 const passwordContainerEl = document.getElementById('passwordContainer')
+const tooltipWrapper = document.getElementById('tooltipWrapper')
 
 const dropdownToggle = document.getElementById("dropdown-toggle");
 const dropdownMenu = document.getElementById("dropdown-menu");
@@ -23,6 +24,7 @@ let userData = {
   phone: "",
   countryCode: "+91",
 };
+let isPasswordValid = false
 
 usernameField.addEventListener("input", (e) => {
   let value = e.target.value;
@@ -86,11 +88,28 @@ passwordField.addEventListener("input", (e) => {
   updateValidation("special", hasSpecial);
   updateValidation("number", hasNumber);
 
-  if (isLengthValid && hasUppercase && hasNumber && hasNumber) {
+  if (isLengthValid && hasUppercase && hasNumber && hasSpecial) {
     passwordContainerEl.classList.remove("error-state");
+    tooltipWrapper.style.display = 'none'
+    isPasswordValid = true
+    // console.log('tooltip');
   } else {
+    tooltipWrapper.style.display = 'block'
     passwordContainerEl.classList.add("error-state");
+    isPasswordValid = false
   }
+});
+
+passwordField.addEventListener('focus', () => {
+  if (!isPasswordValid){
+    tooltipWrapper.style.display = 'block';  
+  }
+});
+
+passwordField.addEventListener('blur', () => {
+  // if (isPasswordValid){
+    tooltipWrapper.style.display = 'none';  
+  // }
 });
 
 function updateValidation(id, isValid) {
