@@ -4,6 +4,12 @@
 //     }
 // }
 
+@mixin mobile() {
+    @media screen and (max-width: 768px) {
+        @content;
+    }
+}
+
 // @mixin custom-min($breakpoint) {
 //     @media (min-width: #{$breakpoint}) {
 //         @content;

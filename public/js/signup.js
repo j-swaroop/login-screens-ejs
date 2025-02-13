@@ -8,13 +8,46 @@ const emailField = document.getElementById("email");
 const phoneField = document.getElementById("phone");
 const passwordContainerEl = document.getElementById('passwordContainer')
 const tooltipWrapper = document.getElementById('tooltipWrapper')
+const countryCodeField = document.getElementById('countryCode');
 
+let errorTextContainer = document.querySelectorAll(".error-msg-feild");
+const errMessage = document.querySelector("#errMessage");
+const userNameWrapper = document.querySelector(".username");
+const emailWrapper = document.querySelector(".email-input");
+const phoneWrapper = document.querySelector('.phone-wrapper')
+const passwordWrapper = document.querySelector(".password-input");
+
+const dropdownWrapper = document.querySelector(".dropdown-wrapper");
 const dropdownToggle = document.getElementById("dropdown-toggle");
 const dropdownMenu = document.getElementById("dropdown-menu");
 const dropdownItemText = document.getElementById("dropdownItemText");
 const dropdownItemImg = document.getElementById("dropdownItemImg");
 const dropdownItems = document.querySelectorAll(".dropdown-item");
 const dropdownContainer = document.querySelector(".dropdown-container");
+const dropdownItemsWrapper = document.querySelector(".dropdown-items-wrapper");
+const dropdownSearchBar = document.querySelector("#dropdownItemsSearch");
+
+const dropdownUpArrow = document.querySelector("#dropdownUpArrow");
+const dropdownDownArrow = document.querySelector("#dropdownDownArrow");
+
+const overlay = document.querySelector(".overlay");
+
+const sectionOne = document.querySelectorAll(".sectionOne");
+const sectionTwo = document.querySelectorAll(".sectionTwo");
+const backButton = document.querySelector('.back-button')
+
+const showPassword = document.getElementById("showPassword");
+const eyeButtonContainer = document.querySelector(".eye-button");
+const showPasswordIcon = document.querySelector(".show-password-icon");
+const hidePasswordIcon = document.querySelector(".hide-password-icon");
+
+const alreadyHaveAccount = document.querySelector(".have-account");
+
+const currentStepWrapper = document.querySelector('.current-step-wrapper');
+const stepOneButton = document.querySelector('#stepOneButton');
+const titleUsername = document.querySelector('.title-username')
+
+let currentStep = 1
 
 let isPasswordVisible = false;
 let userData = {
@@ -25,91 +58,107 @@ let userData = {
   countryCode: "+91",
 };
 let isPasswordValid = false
+let searchValue = "";
+let debounceTimeout;
+
+if (emailField.value){
+  userData.email = emailField.value 
+}
+
+if (phoneField.value){
+  userData.phone = phoneField.value 
+}
+
+if (countryCodeField.value){
+  userData.countryCode = countryCodeField.value
+}
 
 usernameField.addEventListener("input", (e) => {
   let value = e.target.value;
   userData.name = value;
-
-  if (value) {
-    usernameField.classList.remove("error-state");
-  } else {
-    usernameField.classList.add("error-state");
-  }
-  console.log(userData);
 });
 
 emailField.addEventListener("input", (e) => {
   let value = e.target.value;
   userData.email = value;
-
-  const emailRegex =
-    /(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-  if (emailRegex.test(value)) {
-    emailField.classList.remove("error-state");
-  } else {
-    emailField.classList.add("error-state");
-  }
 });
 
 phoneField.addEventListener("input", (e) => {
   let value = e.target.value;
-  userData.phone = value;
+  value = value.replace(/\D/g, ""); 
+  
+  let formattedValue = value.replace(/(\d{5})(?=\d)/g, "$1 ");
+  e.target.value = formattedValue;
 
-  const phonePattern = /^\+?[1-9]\d{1,14}$/;
+  const phonePattern = /^[1-9]\d{0,14}$/; 
   const isValidPhone = phonePattern.test(value);
 
-  if (!isValidPhone) {
-    phoneField.classList.add("error-state");
-  } else {
-    phoneField.classList.remove("error-state");
+  if (value === "") {
+    userData.phone = ""; 
+  } else if (isValidPhone) {
+    userData.phone = value;
   }
+
+  // console.log(userData);
 });
 
-showPassword.addEventListener("click", () => {
-  isPasswordVisible = !isPasswordVisible;
-  isPasswordVisible
-    ? passwordField.setAttribute("type", "text")
-    : passwordField.setAttribute("type", "password");
-});
+
+
+
+function showOrHidePassword(){
+  // isPasswordVisible = !isPasswordVisible;
+  
+  if (isPasswordVisible) {
+    passwordField.setAttribute("type", "text");
+    showPasswordIcon.style.display = "flex";
+    hidePasswordIcon.style.display = "none";
+  } else {
+    passwordField.setAttribute("type", "password");
+    showPasswordIcon.style.display = "none";
+    hidePasswordIcon.style.display = "flex";
+  }
+}
 
 passwordField.addEventListener("input", (e) => {
-  const password = e.target.value;
-  userData.password = password;
+  let value = e.target.value;
+  userData.password = value;
 
-  console.log(userData);
+  if (value) {
+    eyeButtonContainer.style.display = "flex";
+    passwordWrapper.classList.remove("error-state");
+    showOrHidePassword()
+    errorTextContainer[4].style.display = 'none'
+  } else {
+    eyeButtonContainer.style.display = "none";
+  }
 
+  const password = value;
+   
   const isLengthValid = password.length >= 8;
-  const hasUppercase = /[A-Z]/.test(password);
+  // const hasUppercase = /[A-Z]/.test(password);
+  const hasUpperAndLowerCase = /(?=.*[a-z])(?=.*[A-Z])/.test(password);
   const hasNumber = /[0-9]/.test(password);
   const hasSpecial = /[!@#$%^&*]/.test(password);
 
   updateValidation("length", isLengthValid);
-  updateValidation("uppercase", hasUppercase);
+  updateValidation("uppercase", hasUpperAndLowerCase);
   updateValidation("special", hasSpecial);
   updateValidation("number", hasNumber);
 
-  if (isLengthValid && hasUppercase && hasNumber && hasSpecial) {
-    passwordContainerEl.classList.remove("error-state");
+  if (isLengthValid && hasUpperAndLowerCase && hasNumber && hasSpecial) {
     tooltipWrapper.style.display = 'none'
     isPasswordValid = true
-    // console.log('tooltip');
   } else {
     tooltipWrapper.style.display = 'block'
-    passwordContainerEl.classList.add("error-state");
     isPasswordValid = false
   }
+
 });
 
-passwordField.addEventListener('focus', () => {
-  if (!isPasswordValid){
-    tooltipWrapper.style.display = 'block';  
-  }
-});
 
-passwordField.addEventListener('blur', () => {
-  // if (isPasswordValid){
-    tooltipWrapper.style.display = 'none';  
-  // }
+showPassword.addEventListener("click", () => {
+  isPasswordVisible = !isPasswordVisible;
+  showOrHidePassword()
 });
 
 function updateValidation(id, isValid) {
@@ -128,19 +177,40 @@ function updateValidation(id, isValid) {
   }
 }
 
-dropdownToggle.addEventListener("click", function () {
+function toggleDropdown() {
   if (
     dropdownMenu.style.display === "none" ||
     dropdownMenu.style.display === ""
   ) {
-    dropdownMenu.style.display = "block";
+    dropdownMenu.classList.add("open");
+    overlay.classList.add("open");
+    dropdownMenu.style.display = "flex";
+    dropdownDownArrow.classList.remove("show-dropdown-arrow-icon");
+    dropdownUpArrow.classList.add("show-dropdown-arrow-icon");
   } else {
+    dropdownMenu.classList.remove("open");
+    overlay.classList.remove("open");
     dropdownMenu.style.display = "none";
+    dropdownDownArrow.classList.add("show-dropdown-arrow-icon");
+    dropdownUpArrow.classList.remove("show-dropdown-arrow-icon");
   }
-});
+}
+dropdownToggle.addEventListener("click", toggleDropdown);
 
 function generateDropdownItems() {
-  countries.forEach((country) => {
+  let allCountries = countries;
+  dropdownItemsWrapper.innerHTML = "";
+
+  if (searchValue) {
+    let filteredItems = allCountries.filter(
+      (item) =>
+        item.phone.includes(searchValue) ||
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    allCountries = filteredItems;
+  }
+
+  allCountries.forEach((country) => {
     const item = document.createElement("div");
     item.classList.add("dropdown-item");
 
@@ -152,33 +222,65 @@ function generateDropdownItems() {
 
     item.appendChild(itemImg);
 
+    const countryItemTextWrapper = document.createElement("div");
+    countryItemTextWrapper.classList.add("dropdown-item-text-wrapper");
+    item.appendChild(countryItemTextWrapper);
+
     const countryName = document.createElement("span");
     countryName.textContent = country.name;
     countryName.classList.add("dropdown-item-name");
-    item.appendChild(countryName);
+    countryItemTextWrapper.appendChild(countryName);
 
     const countryCode = document.createElement("span");
     countryCode.textContent = country.phone;
     countryCode.classList.add("dropdown-item-phone");
-    item.appendChild(countryCode);
+    countryItemTextWrapper.appendChild(countryCode);
 
-    dropdownMenu.appendChild(item);
+    dropdownItemsWrapper.appendChild(item);
+
+    if (userData.countryCode && userData.countryCode === country.phone) {
+      item.classList.add("selected");
+      dropdownItemText.textContent = country.phone;
+      dropdownItemImg.src = country.flag;
+      // dropdownContainer.classList.add('disabled')
+    }
 
     item.addEventListener("click", function () {
-      console.log(country);
+      // console.log(country);
       dropdownItemText.textContent = country.phone;
       dropdownItemImg.src = country.flag;
       userData.countryCode = country.phone;
-      console.log(userData);
+      // console.log(userData);
 
       dropdownMenu.style.display = "none";
+      searchValue = "";
+      dropdownSearchBar.value = "";
+      overlay.classList.remove("open");
+      dropdownDownArrow.classList.add("show-dropdown-arrow-icon");
+      dropdownUpArrow.classList.remove("show-dropdown-arrow-icon");
+      generateDropdownItems();
     });
   });
 }
 
 generateDropdownItems();
 
-dropdownContainer.addEventListener("blur", ({ relatedTarget }) => {
+dropdownSearchBar.addEventListener("input", (e) => {
+  const value = e.target.value;
+  searchValue = value;
+  if (value) {
+    clearTimeout(debounceTimeout);
+
+    debounceTimeout = setTimeout(() => {
+      generateDropdownItems();
+    }, 500);
+  } else {
+    generateDropdownItems();
+  }
+});
+
+
+function handleBlur(relatedTarget) {
   if (
     dropdownContainer &&
     (dropdownContainer.contains(relatedTarget) ||
@@ -186,58 +288,147 @@ dropdownContainer.addEventListener("blur", ({ relatedTarget }) => {
   ) {
     return;
   }
+  overlay.classList.remove("open");
   dropdownMenu.style.display = "none";
+  searchValue = "";
+  dropdownSearchBar.value = "";
+  dropdownDownArrow.classList.add("show-dropdown-arrow-icon");
+  dropdownUpArrow.classList.remove("show-dropdown-arrow-icon");
+  generateDropdownItems();
+}
+
+dropdownContainer.addEventListener("blur", ({ relatedTarget }) => {
+  handleBlur(relatedTarget);
 });
 
-signUpForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+dropdownSearchBar.addEventListener("blur", ({ relatedTarget }) => {
+  handleBlur(relatedTarget);
+});
 
-  const { name, email, password, phone, countryCode } = userData;
+backButton.addEventListener('click', () => {
+  currentStep -= 1
+  toggleSectionOneOrTwo()
+})
 
-  usernameField.classList.remove("error-state");
-  emailField.classList.remove("error-state");
-  passwordContainerEl.classList.remove("error-state");
-  phoneField.classList.remove("error-state");
+function toggleSectionOneOrTwo(){
+  if (currentStep !== 1){
+    sectionOne[0].classList.add('hide-content')
+    sectionTwo[0].classList.remove('hide-content')
+    sectionOne[1].classList.add('hide-content')
+    sectionTwo[1].classList.remove('hide-content')
+    alreadyHaveAccount.classList.add('hide-content')
+    currentStepWrapper.children[1].classList.add('active-step');
+    currentStepWrapper.children[0].classList.remove('active-step');
+    backButton.classList.remove('hide-content')
+    titleUsername.innerHTML = `Welcome ${userData.name}`
+  }else{
+    sectionOne[0].classList.remove('hide-content')
+    sectionTwo[0].classList.add('hide-content')
+    sectionOne[1].classList.remove('hide-content')
+    sectionTwo[1].classList.add('hide-content')
+    alreadyHaveAccount.classList.remove('hide-content')
+    currentStepWrapper.children[0].classList.add('active-step');
+    currentStepWrapper.children[1].classList.remove('active-step');
+    backButton.classList.add('hide-content')
+  }
+}
+
+function validateStepOne(){
+  const { name, email, password, phone, countryCode } = userData
+  // console.log(userData);
+  userNameWrapper.classList.remove("error-state");
+  emailWrapper.classList.remove("error-state");
+  // passwordContainerEl.classList.remove("error-state");
+  phoneWrapper.classList.remove("error-state");
+
+  errorTextContainer[0].style.display = "none";
+  errorTextContainer[1].style.display = "none";
+  errorTextContainer[2].style.display = "none";
+  errorTextContainer[3].style.display = "none";
 
   const isAllEmpty =
     !userData.name.trim() &&
     !userData.email.trim() &&
-    !userData.password.trim() &&
+    // !userData.password.trim() &&
     !userData.phone.trim();
 
   if (isAllEmpty) {
-    usernameField.classList.add("error-state");
-    emailField.classList.add("error-state");
-    passwordContainerEl.classList.add("error-state");
-    phoneField.classList.add("error-state");
+    userNameWrapper.classList.add("error-state");
+    errorTextContainer[0].style.display = "flex";
+    errorTextContainer[3].style.display = "flex";
     return;
   }
 
   if (!name.trim()) {
-    usernameField.classList.add("error-state");
+    userNameWrapper.classList.add("error-state");
+    errorTextContainer[0].style.display = "flex";
     return;
   }
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  if (!emailRegex.test(email)) {
-    emailField.classList.add("error-state");
+  if (!email && !phone) {
+    if (!email) emailWrapper.classList.add("error-state");
+    if (!phone) phoneWrapper.classList.add("error-state");
+    errorTextContainer[3].style.display = "flex";
     return;
   }
 
-  const phonePattern = /^\+?[1-9]\d{1,14}$/;
-  const isValidPhone = phonePattern.test(phone);
+  if (email.trim()){
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      emailWrapper.classList.add("error-state");
+      errorTextContainer[1].style.display = "flex";
+      return
+    }
+  }
+  if (phone.trim()){
+    // const phonePattern = /^\+?[1-9]\d{1,14}$/;
+    const phonePattern = /^\d{10}$/;
+    const isValidPhone = phonePattern.test(phone);
 
-  if (!isValidPhone) {
-    phoneField.classList.add("error-state");
-    return;
+    if (!isValidPhone) {
+      phoneWrapper.classList.add("error-state");
+      errorTextContainer[2].style.display = "flex";
+      return;
+    }
   }
 
+  currentStep += 1
+  toggleSectionOneOrTwo()
+
+}
+
+// function validateStepTwo(){
+  
+// }
+
+stepOneButton.addEventListener('click', () => {
+  validateStepOne()
+})
+
+signUpForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  errorTextContainer[4].style.display = 'none'
+  passwordWrapper.classList.remove("error-state");
+
+  const { name, email, password, phone, countryCode } = userData
   const isLengthValid = password.length >= 8;
-  const hasUppercase = /[A-Z]/.test(password);
+  // const hasUppercase = /[A-Z]/.test(password);
+  const hasUpperAndLowerCase = /(?=.*[a-z])(?=.*[A-Z])/.test(password);
   const hasNumber = /[0-9]/.test(password);
   const hasSpecial = /[!@#$%^&*]/.test(password);
-  if (!isLengthValid && !hasUppercase && !hasNumber && !hasSpecial) {
-    passwordContainerEl.classList.add("error-state");
+
+  if (!password){
+    passwordWrapper.classList.add("error-state");
+    errorTextContainer[4].style.display = 'flex'
     return;
   }
+
+  if (!(isLengthValid && hasUpperAndLowerCase && hasNumber && hasSpecial)){ 
+    passwordWrapper.classList.add("error-state");
+    errMessage.innerHTML = '*Invalid password'
+    errorTextContainer[4].style.display = 'flex'
+    return;
+  }
+    
+  
 });
