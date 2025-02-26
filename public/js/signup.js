@@ -318,7 +318,7 @@ function toggleSectionOneOrTwo(){
     sectionTwo[1].classList.remove('hide-content')
     alreadyHaveAccount.classList.add('hide-content')
     currentStepWrapper.children[1].classList.add('active-step');
-    currentStepWrapper.children[0].classList.remove('active-step');
+    currentStepWrapper.children[0].classList.add('active-step');
     backButton.classList.remove('hide-content')
     titleUsername.innerHTML = `Welcome ${userData.name}`
   }else{
@@ -334,6 +334,12 @@ function toggleSectionOneOrTwo(){
 }
 
 function validateStepOne(){
+
+  let messageEl = document.getElementById('message')
+  if (messageEl){
+    messageEl.style.display = 'none'
+  }
+
   const { name, email, password, phone, countryCode } = userData
   // console.log(userData);
   userNameWrapper.classList.remove("error-state");

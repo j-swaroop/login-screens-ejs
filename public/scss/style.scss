@@ -204,6 +204,10 @@ body {
             text-underline-offset: auto;
             text-underline-position: from-font;
             cursor: pointer;
+
+            &:hover{
+              color: var(--Governor-Bay-400, #7291E8);
+            }
           }
         }
         .have-account-text-left{
@@ -312,6 +316,24 @@ body {
     font-weight: 700;
   }
 }
+.error-msg-feild-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // gap: 0.25rem;
+  // display: none;
+
+  color: $border-12;
+  font-size: .75rem;
+  font-style: normal;
+  line-height: normal;
+  font-weight: 700;
+}
+
+.hidden{
+  display: none;
+}
+
 input.error-state:focus {
   border: 1px solid $color-25;
 }
@@ -602,11 +624,49 @@ input.error-state:focus {
       align-items: center;
       padding-right: .8125rem;
       cursor: pointer;
-      .show-password-icon{
+      // .show-password-icon{
+      //   display: none;
+      //   &:hover{
+      //     // background-color: #9CA3AF;
+      //   }
+      // }
+      // .hide-password-icon{
+      //   display: none;
+      //   &:hover{
+      //     // background-color: #9CA3AF;
+      //   }
+      // }
+
+      .show-password-icon svg:first-child {
+        display: flex;
+      }
+    
+      .show-password-icon svg:nth-child(2) {
+        display: none; 
+      }
+    
+      &:hover .show-password-icon svg:first-child {
         display: none;
       }
-      .hide-password-icon{
+    
+      &:hover .show-password-icon svg:nth-child(2) {
+        display: flex;  
+      }
+
+      .hide-password-icon svg:first-child {
+        display: flex;
+      }
+    
+      .hide-password-icon svg:nth-child(2) {
         display: none;
+      }
+    
+      &:hover .hide-password-icon svg:first-child {
+        display: none;
+      }
+    
+      &:hover .hide-password-icon svg:nth-child(2) {
+        display: flex;
       }
     }
 

@@ -256,6 +256,9 @@ body {
   text-underline-position: from-font;
   cursor: pointer;
 }
+.default-page-wrapper .default-page-content-wrapper .left-section .left-section-content-wrapper .have-account a:hover {
+  color: var(--Governor-Bay-400, #7291E8);
+}
 .default-page-wrapper .default-page-content-wrapper .left-section .left-section-content-wrapper .have-account-text-left {
   text-align: left;
   align-self: flex-start;
@@ -348,6 +351,21 @@ body {
   font-style: normal;
   line-height: normal;
   font-weight: 700;
+}
+
+.error-msg-feild-2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-style: normal;
+  line-height: normal;
+  font-weight: 700;
+}
+
+.hidden {
+  display: none;
 }
 
 input.error-state:focus {
@@ -627,11 +645,29 @@ input.error-state:focus {
   padding-right: 0.8125rem;
   cursor: pointer;
 }
-.input-wrapper .input-field .eye-button .show-password-icon {
+.input-wrapper .input-field .eye-button .show-password-icon svg:first-child {
+  display: flex;
+}
+.input-wrapper .input-field .eye-button .show-password-icon svg:nth-child(2) {
   display: none;
 }
-.input-wrapper .input-field .eye-button .hide-password-icon {
+.input-wrapper .input-field .eye-button:hover .show-password-icon svg:first-child {
   display: none;
+}
+.input-wrapper .input-field .eye-button:hover .show-password-icon svg:nth-child(2) {
+  display: flex;
+}
+.input-wrapper .input-field .eye-button .hide-password-icon svg:first-child {
+  display: flex;
+}
+.input-wrapper .input-field .eye-button .hide-password-icon svg:nth-child(2) {
+  display: none;
+}
+.input-wrapper .input-field .eye-button:hover .hide-password-icon svg:first-child {
+  display: none;
+}
+.input-wrapper .input-field .eye-button:hover .hide-password-icon svg:nth-child(2) {
+  display: flex;
 }
 .input-wrapper .input-field:hover {
   border: 1px solid #9ca3af;

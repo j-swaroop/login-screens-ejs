@@ -29,12 +29,22 @@ const overlay = document.querySelector(".overlay");
 
 const dropdownUpArrow = document.querySelector("#dropdownUpArrow");
 const dropdownDownArrow = document.querySelector("#dropdownDownArrow");
+const passwordError = document.querySelector('#passwordError')
+const emailError = document.querySelector('#emailError')
 
 let isPasswordVisible = false;
 let searchValue = "";
 let debounceTimeout;
 
 dropdownWrapper.style.display = 'none'
+
+if (passwordError && passwordError.textContent.trim() !== '') {
+  passwordWrapper.classList.add("error-state");
+}
+
+if (emailError && emailError.textContent.trim() !== '') {
+  emailOrPhoneWrapper.classList.add("error-state");
+}
 
 function toggleDropdown() {
   if (
@@ -262,6 +272,14 @@ showPassword.addEventListener("click", () => {
 
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  if (passwordError) {
+    passwordError.style.display = 'none'; 
+  }
+
+  if (emailError) {
+    emailError.style.display = 'none'; 
+  }
 
   countryCodeField.value = userData.countryCode
 
