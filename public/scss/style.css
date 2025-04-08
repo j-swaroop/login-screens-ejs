@@ -184,7 +184,7 @@ body {
   align-items: flex-start;
   justify-content: center;
   gap: 1.5rem;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
   min-height: 2.375rem;
   cursor: pointer;
 }
@@ -583,7 +583,7 @@ input.error-state:focus {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.25rem;
+  gap: 1rem;
   width: 100%;
 }
 
@@ -714,6 +714,12 @@ input.error-state:focus {
   font-weight: 400;
   line-height: 1.25rem; /* 142.857% */
 }
+.back-button:hover span {
+  color: #374151;
+}
+.back-button:hover svg path {
+  fill: #374151;
+}
 
 .current-step-wrapper {
   position: absolute;
@@ -758,6 +764,24 @@ input.error-state:focus {
 }
 .disabled-styles:focus-within {
   border: 1px solid #d1d5db !important;
+}
+
+.first-step-signup {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.second-step-signup {
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 @media screen and (max-width: 768px) {

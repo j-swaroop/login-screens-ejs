@@ -6,7 +6,7 @@ let passwordField = document.getElementById("password");
 let errorTextContainer = document.querySelectorAll(".error-msg-feild");
 let showPassword = document.getElementById("showPassword");
 let loginBtn = document.getElementById("loginBtn");
-const countryCodeField = document.getElementById('countryCode');
+const countryCodeField = document.getElementById("countryCode");
 
 const phoneField = document.getElementById("phone");
 
@@ -29,22 +29,49 @@ const overlay = document.querySelector(".overlay");
 
 const dropdownUpArrow = document.querySelector("#dropdownUpArrow");
 const dropdownDownArrow = document.querySelector("#dropdownDownArrow");
-const passwordError = document.querySelector('#passwordError')
-const emailError = document.querySelector('#emailError')
+const passwordError = document.querySelector("#passwordError");
+const emailError = document.querySelector("#emailError");
 
 let isPasswordVisible = false;
 let searchValue = "";
 let debounceTimeout;
 
-dropdownWrapper.style.display = 'none'
+let userData = {
+  email: "",
+  password: "",
+  contactNumber: "",
+  countryCode: "+91",
+};
 
-if (passwordError && passwordError.textContent.trim() !== '') {
+dropdownWrapper.style.display = "none";
+
+if (passwordError && passwordError.textContent.trim() !== "") {
   passwordWrapper.classList.add("error-state");
 }
 
-if (emailError && emailError.textContent.trim() !== '') {
+if (emailError && emailError.textContent.trim() !== "") {
   emailOrPhoneWrapper.classList.add("error-state");
 }
+
+if (passwordField.value){
+  userData.password = passwordField.value
+  eyeButtonContainer.style.display = "flex";
+}
+
+if (countryCodeField.value) {
+  userData.countryCode = countryCodeField.value;
+
+  dropdownWrapper.style.display = "flex";
+  emailField.name = "contactNumber";
+  userData.contactNumber = emailField.value
+}
+
+if (!countryCodeField.value){
+  emailField.name = "email";
+  userData.contactNumber = "";
+  userData.email = emailField.value;
+}
+
 
 function toggleDropdown() {
   if (
@@ -108,8 +135,14 @@ function generateDropdownItems() {
 
     dropdownItemsWrapper.appendChild(item);
 
+
+    if (userData.countryCode && userData.countryCode === country.phone){
+      dropdownItemText.textContent = country.phone;
+      dropdownItemImg.src = country.flag;
+    }
+
     item.addEventListener("click", function () {
-      console.log(country);
+      // console.log(country);
       dropdownItemText.textContent = country.phone;
       dropdownItemImg.src = country.flag;
       userData.countryCode = country.phone;
@@ -171,12 +204,6 @@ const emailRegex =
   /(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
 const phoneRegex = /^\d{10}$/;
 
-let userData = {
-  email: "",
-  password: "",
-  contactNumber: "",
-  countryCode: "+91",
-};
 
 const validateForm = () => {
   const isEmailValid = emailRegex.test(userData.email);
@@ -195,6 +222,29 @@ emailField.addEventListener("blur", (e) => {
     errorTextContainer[0].style.display = "none";
   }
 });
+
+function hideErrorMessages(){
+  errorTextContainer[0].style.display = "none";
+  errorTextContainer[1].style.display = "none";
+
+  emailOrPhoneWrapper.classList.remove("error-state");
+  passwordWrapper.classList.remove("error-state");
+
+
+  if (passwordError) {
+    passwordError.style.display = "none";
+  }
+
+  if (emailError) {
+    emailError.style.display = "none";
+  }
+
+  let messageEl = document.getElementById('message')
+  if (messageEl){
+    messageEl.style.display = 'none'
+  }
+
+}
 
 emailField.addEventListener("input", (e) => {
   // console.log(e.target.value);
@@ -222,6 +272,8 @@ emailField.addEventListener("input", (e) => {
     userData.contactNumber = "";
     userData.email = value;
   }
+
+  hideErrorMessages()
 });
 
 // phoneField.addEventListener("input", (e) => {
@@ -235,9 +287,9 @@ emailField.addEventListener("input", (e) => {
 //   validateForm();
 // });
 
-function showOrHidePassword(){
+function showOrHidePassword() {
   // isPasswordVisible = !isPasswordVisible;
-  
+
   if (isPasswordVisible) {
     passwordField.setAttribute("type", "text");
     showPasswordIcon.style.display = "flex";
@@ -256,32 +308,33 @@ passwordField.addEventListener("input", (e) => {
   if (value) {
     eyeButtonContainer.style.display = "flex";
     passwordWrapper.classList.remove("error-state");
-    showOrHidePassword()
+    showOrHidePassword();
     errorTextContainer[1].style.display = "none";
   } else {
     eyeButtonContainer.style.display = "none";
   }
 
+  hideErrorMessages()
   // validateForm();
 });
 
 showPassword.addEventListener("click", () => {
   isPasswordVisible = !isPasswordVisible;
-  showOrHidePassword()
+  showOrHidePassword();
 });
 
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
   if (passwordError) {
-    passwordError.style.display = 'none'; 
+    passwordError.style.display = "none";
   }
 
   if (emailError) {
-    emailError.style.display = 'none'; 
+    emailError.style.display = "none";
   }
 
-  countryCodeField.value = userData.countryCode
+  countryCodeField.value = userData.countryCode;
 
   if ((!userData.email || !userData.contactNumber) && !userData.password) {
     emailOrPhoneWrapper.classList.add("error-state");
@@ -315,7 +368,6 @@ loginForm.addEventListener("submit", (e) => {
     passwordWrapper.classList.remove("error-state");
     errorTextContainer[1].style.display = "none";
   }
-
 
   // console.log('Harry', userData);
 });

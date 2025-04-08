@@ -132,7 +132,7 @@ body {
           align-items: flex-start;
           justify-content: center;
           gap: 1.5rem;
-          margin-top: .25rem;
+          margin-top: .5rem;
           min-height: 2.375rem;
           cursor: pointer;
 
@@ -563,7 +563,8 @@ input.error-state:focus {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.25rem;
+  // gap: 1.25rem;
+  gap: 1rem;
   width: 100%;
 }
 
@@ -716,7 +717,19 @@ input.error-state:focus {
     font-style: normal;
     font-weight: 400;
     line-height: 1.25rem; /* 142.857% */
+
   }
+  &:hover{
+    span{
+      color: $color-1;
+    }
+    svg{
+      path{
+        fill: $color-1;
+      }
+    }
+  }
+
 }
 
 .current-step-wrapper{
@@ -761,6 +774,24 @@ input.error-state:focus {
   }
 
 }
+.first-step-signup{
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.second-step-signup{
+  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
 @include mobile{
   .default-page-wrapper {
     width: 100%;

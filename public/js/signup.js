@@ -1,5 +1,6 @@
 import { countries } from "./countries.js";
 
+const signupFormStepOne = document.querySelector('#signupFormStepOne')
 const signUpForm = document.querySelector("#signUpForm");
 
 const usernameField = document.getElementById("usernameField");
@@ -73,14 +74,35 @@ if (countryCodeField.value){
   userData.countryCode = countryCodeField.value
 }
 
+function hideErrorMessages(){
+  errorTextContainer[0].style.display = "none";
+  errorTextContainer[1].style.display = "none";
+  errorTextContainer[2].style.display = "none";
+  errorTextContainer[3].style.display = "none";
+  errorTextContainer[4].style.display = 'none'
+  userNameWrapper.classList.remove("error-state");
+  emailWrapper.classList.remove("error-state");
+  phoneWrapper.classList.remove("error-state");
+
+  let messageEl = document.getElementById('message')
+  if (messageEl){
+    messageEl.style.display = 'none'
+  }
+
+}
+
 usernameField.addEventListener("input", (e) => {
   let value = e.target.value;
   userData.name = value;
+
+  hideErrorMessages()
 });
 
 emailField.addEventListener("input", (e) => {
   let value = e.target.value;
   userData.email = value;
+
+  hideErrorMessages()
 });
 
 phoneField.addEventListener("input", (e) => {
@@ -98,8 +120,8 @@ phoneField.addEventListener("input", (e) => {
   } else if (isValidPhone) {
     userData.phone = value;
   }
-
-  // console.log(userData);
+  
+  hideErrorMessages()
 });
 
 
@@ -398,8 +420,24 @@ function validateStepOne(){
     }
   }
 
-  currentStep += 1
-  toggleSectionOneOrTwo()
+  isEmailRegistered(email, function (error, response) {
+    if (response.data) {
+      messageEl.classList.remove("hidden");
+      messageEl.style.display = 'flex'
+      messageEl.innerText = "This email is already registered!"; 
+      return;
+    }
+
+    // if (messageEl.className.indexOf('hidden') === -1) {
+    //   messageEl.classList.add("hidden");
+    // }
+
+    currentStep += 1;
+    toggleSectionOneOrTwo();
+  });  
+
+  // currentStep += 1
+  // toggleSectionOneOrTwo()
 
 }
 
@@ -435,6 +473,9 @@ signUpForm.addEventListener("submit", (event) => {
     errorTextContainer[4].style.display = 'flex'
     return;
   }
+
+
+  console.log(userData)
     
   
 });
