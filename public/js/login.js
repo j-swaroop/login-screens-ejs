@@ -109,6 +109,7 @@ function generateDropdownItems() {
 
   allCountries.forEach((country) => {
     const item = document.createElement("div");
+    item.id = country._id
     item.classList.add("dropdown-item");
 
     //   item.dataset.id = country._id;
@@ -143,10 +144,37 @@ function generateDropdownItems() {
 
     item.addEventListener("click", function () {
       // console.log(country);
+       // Check the image element
+
+      // dropdownItemText.textContent = country.phone;
+      // dropdownItemImg.src = country.flag;
+      // userData.countryCode = country.phone;
+     
+
+      const selectedFlagImg = document.getElementById("dropdownItemImg");
+
+      // Remove the current image element from the label
+      if (selectedFlagImg) {
+        selectedFlagImg.remove();
+      }
+
+      // Create a new image element
+      const newImgElement = document.createElement("img");
+      newImgElement.src = country.flag; 
+      newImgElement.alt = `${country.name} flag`;
+      newImgElement.id = "dropdownItemImg"; 
+
+      const label = document.querySelector(".dropdown-selected-option");
+      label.prepend(newImgElement);
+
+      // Update the phone code in the label
+      const selectedPhoneCode = document.getElementById("dropdownItemText");
+      selectedPhoneCode.textContent = country.phone;
+      
       dropdownItemText.textContent = country.phone;
-      dropdownItemImg.src = country.flag;
+      // dropdownItemImg.src = country.flag;
       userData.countryCode = country.phone;
-      // console.log(userData);
+      
 
       dropdownMenu.style.display = "none";
       searchValue = "";
@@ -202,7 +230,9 @@ dropdownSearchBar.addEventListener("blur", ({ relatedTarget }) => {
 
 const emailRegex =
   /(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-zA-Z0-9-]*[a-zA-Z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-const phoneRegex = /^\d{10}$/;
+// const phoneRegex = /^\d{10}$/;
+const phoneRegex = /^\d{4,12}$/;
+
 
 
 const validateForm = () => {
@@ -259,7 +289,7 @@ emailField.addEventListener("input", (e) => {
 
   // validateForm();
 
-  if (/^\d{1,10}$/.test(value)) {
+  if (/^\d{1,12}$/.test(value)) {
     dropdownWrapper.style.display = "flex";
     // emailField.type = 'tel'
     emailField.name = "contactNumber";
@@ -369,5 +399,5 @@ loginForm.addEventListener("submit", (e) => {
     errorTextContainer[1].style.display = "none";
   }
 
-  // console.log('Harry', userData);
+  console.log('Harry', userData);
 });

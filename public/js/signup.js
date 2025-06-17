@@ -269,10 +269,34 @@ function generateDropdownItems() {
 
     item.addEventListener("click", function () {
       // console.log(country);
-      dropdownItemText.textContent = country.phone;
-      dropdownItemImg.src = country.flag;
-      userData.countryCode = country.phone;
+      // dropdownItemText.textContent = country.phone;
+      // dropdownItemImg.src = country.flag;
+      // userData.countryCode = country.phone;
       // console.log(userData);
+
+      const selectedFlagImg = document.getElementById("dropdownItemImg");
+
+      // Remove the current image element from the label
+      if (selectedFlagImg) {
+        selectedFlagImg.remove();
+      }
+
+      // Create a new image element
+      const newImgElement = document.createElement("img");
+      newImgElement.src = country.flag; 
+      newImgElement.alt = `${country.name} flag`;
+      newImgElement.id = "dropdownItemImg"; 
+
+      const label = document.querySelector(".dropdown-selected-option");
+      label.prepend(newImgElement);
+
+      // Update the phone code in the label
+      const selectedPhoneCode = document.getElementById("dropdownItemText");
+      selectedPhoneCode.textContent = country.phone;
+      
+      dropdownItemText.textContent = country.phone;
+      // dropdownItemImg.src = country.flag;
+      userData.countryCode = country.phone;
 
       dropdownMenu.style.display = "none";
       searchValue = "";
@@ -410,7 +434,8 @@ function validateStepOne(){
   }
   if (phone.trim()){
     // const phonePattern = /^\+?[1-9]\d{1,14}$/;
-    const phonePattern = /^\d{10}$/;
+    // const phonePattern = /^\d{10}$/;
+    const phonePattern = /^\d{4,12}$/;
     const isValidPhone = phonePattern.test(phone);
 
     if (!isValidPhone) {
