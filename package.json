@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "sass": "sass public/scss/style.scss public/scss/style.css --style=expanded --source-map",
+    "sass:watch": "sass public/scss/style.scss public/scss/style.css --style=expanded --source-map --watch"
   },
   "keywords": [],
   "author": "",
