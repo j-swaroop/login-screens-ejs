@@ -12,6 +12,7 @@ const tooltipWrapper = document.getElementById('tooltipWrapper')
 const countryCodeField = document.getElementById('countryCode');
 
 let errorTextContainer = document.querySelectorAll(".error-msg-feild");
+const passwordErrorTextContainer = document.getElementById("passwrodErrorTextContainer");
 const errMessage = document.querySelector("#errMessage");
 const userNameWrapper = document.querySelector(".username");
 const emailWrapper = document.querySelector(".email-input");
@@ -47,6 +48,13 @@ const alreadyHaveAccount = document.querySelector(".have-account");
 const currentStepWrapper = document.querySelector('.current-step-wrapper');
 const stepOneButton = document.querySelector('#stepOneButton');
 const titleUsername = document.querySelector('.title-username')
+const loginViaOptionWrapper = document.querySelector('.login-via-option-wrapper');
+
+// Simple testimonial carousel with dot navigation
+const testimonialText = document.getElementById("testimonialText");
+const testimonialAuthor = document.getElementById("testimonialAuthor");
+const testimonialRole = document.getElementById("testimonialRole");
+const testimonialDots = document.getElementById("testimonialDots");
 
 let currentStep = 1
 
@@ -75,12 +83,11 @@ if (countryCodeField.value){
 }
 
 function hideErrorMessages(){
-  errorTextContainer[0].style.display = "none";
-  errorTextContainer[1].style.display = "none";
-  errorTextContainer[2].style.display = "none";
-  errorTextContainer[3].style.display = "none";
-  errorTextContainer[4].style.display = 'none'
-  userNameWrapper.classList.remove("error-state");
+  errorTextContainer.forEach((el) => {
+    el.style.display = "none";
+  });
+  if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = 'none'
+  userNameWrapper?.classList.remove("error-state");
   emailWrapper.classList.remove("error-state");
   phoneWrapper.classList.remove("error-state");
 
@@ -91,12 +98,12 @@ function hideErrorMessages(){
 
 }
 
-usernameField.addEventListener("input", (e) => {
-  let value = e.target.value;
-  userData.name = value;
+// usernameField.addEventListener("input", (e) => {
+//   let value = e.target.value;
+//   userData.name = value;
 
-  hideErrorMessages()
-});
+//   hideErrorMessages()
+// });
 
 emailField.addEventListener("input", (e) => {
   let value = e.target.value;
@@ -149,7 +156,7 @@ passwordField.addEventListener("input", (e) => {
     eyeButtonContainer.style.display = "flex";
     passwordWrapper.classList.remove("error-state");
     showOrHidePassword()
-    errorTextContainer[4].style.display = 'none'
+    if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = 'none'
   } else {
     eyeButtonContainer.style.display = "none";
   }
@@ -362,7 +369,7 @@ function toggleSectionOneOrTwo(){
     sectionTwo[0].classList.remove('hide-content')
     sectionOne[1].classList.add('hide-content')
     sectionTwo[1].classList.remove('hide-content')
-    alreadyHaveAccount.classList.add('hide-content')
+    // alreadyHaveAccount.classList.add('hide-content')
     currentStepWrapper.children[1].classList.add('active-step');
     currentStepWrapper.children[0].classList.add('active-step');
     backButton.classList.remove('hide-content')
@@ -372,7 +379,7 @@ function toggleSectionOneOrTwo(){
     sectionTwo[0].classList.add('hide-content')
     sectionOne[1].classList.remove('hide-content')
     sectionTwo[1].classList.add('hide-content')
-    alreadyHaveAccount.classList.remove('hide-content')
+    // alreadyHaveAccount.classList.remove('hide-content')
     currentStepWrapper.children[0].classList.add('active-step');
     currentStepWrapper.children[1].classList.remove('active-step');
     backButton.classList.add('hide-content')
@@ -386,41 +393,18 @@ function validateStepOne(){
     messageEl.style.display = 'none'
   }
 
-  const { name, email, password, phone, countryCode } = userData
-  // console.log(userData);
-  userNameWrapper.classList.remove("error-state");
+  const { email, password } = userData
   emailWrapper.classList.remove("error-state");
-  // passwordContainerEl.classList.remove("error-state");
-  phoneWrapper.classList.remove("error-state");
+  passwordWrapper.classList.remove("error-state");
 
-  errorTextContainer[0].style.display = "none";
-  errorTextContainer[1].style.display = "none";
-  errorTextContainer[2].style.display = "none";
-  errorTextContainer[3].style.display = "none";
+  errorTextContainer.forEach((el) => {
+    el.style.display = "none";
+  });
+  if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = "none";
 
-  const isAllEmpty =
-    !userData.name.trim() &&
-    !userData.email.trim() &&
-    // !userData.password.trim() &&
-    !userData.phone.trim();
-
-  if (isAllEmpty) {
-    userNameWrapper.classList.add("error-state");
-    errorTextContainer[0].style.display = "flex";
-    errorTextContainer[3].style.display = "flex";
-    return;
-  }
-
-  if (!name.trim()) {
-    userNameWrapper.classList.add("error-state");
-    errorTextContainer[0].style.display = "flex";
-    return;
-  }
-
-  if (!email && !phone) {
-    if (!email) emailWrapper.classList.add("error-state");
-    if (!phone) phoneWrapper.classList.add("error-state");
-    errorTextContainer[3].style.display = "flex";
+  if (!email.trim()) {
+    errorTextContainer[1].style.display = "flex";
+    emailWrapper.classList.add("error-state");
     return;
   }
 
@@ -432,37 +416,45 @@ function validateStepOne(){
       return
     }
   }
-  if (phone.trim()){
-    // const phonePattern = /^\+?[1-9]\d{1,14}$/;
-    // const phonePattern = /^\d{10}$/;
-    const phonePattern = /^\d{4,12}$/;
-    const isValidPhone = phonePattern.test(phone);
 
-    if (!isValidPhone) {
-      phoneWrapper.classList.add("error-state");
-      errorTextContainer[2].style.display = "flex";
-      return;
-    }
+  const isLengthValid = password.length >= 8;
+  const hasUpperAndLowerCase = /(?=.*[a-z])(?=.*[A-Z])/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecial = /[!@#$%^&*]/.test(password);
+
+  if (!password) {
+    passwordWrapper.classList.add("error-state");
+    if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = "flex";
+    errMessage.innerHTML = "*Please enter password";
+    return;
   }
 
-  isEmailRegistered(email, function (error, response) {
-    if (response.data) {
-      messageEl.classList.remove("hidden");
-      messageEl.style.display = 'flex'
-      messageEl.innerText = "This email is already registered!"; 
-      return;
-    }
+  if (!(isLengthValid && hasUpperAndLowerCase && hasNumber && hasSpecial)) {
+    passwordWrapper.classList.add("error-state");
+    if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = "flex";
+    errMessage.innerHTML = "*Invalid password";
+    return;
+  }
 
-    // if (messageEl.className.indexOf('hidden') === -1) {
-    //   messageEl.classList.add("hidden");
-    // }
+  // isEmailRegistered(email, function (error, response) {
+  //   if (response.data) {
+  //     messageEl.classList.remove("hidden");
+  //     messageEl.style.display = 'flex'
+  //     messageEl.innerText = "This email is already registered!"; 
+  //     return;
+  //   }
 
-    currentStep += 1;
-    toggleSectionOneOrTwo();
-  });  
+  //   // if (messageEl.className.indexOf('hidden') === -1) {
+  //   //   messageEl.classList.add("hidden");
+  //   // }
 
-  // currentStep += 1
-  // toggleSectionOneOrTwo()
+  //   currentStep += 1;
+  //   toggleSectionOneOrTwo();
+  // });  
+
+  currentStep += 1
+  loginViaOptionWrapper.classList.add('hide-content')
+  toggleSectionOneOrTwo()
 
 }
 
@@ -474,9 +466,53 @@ stepOneButton.addEventListener('click', () => {
   validateStepOne()
 })
 
+
+const testimonials = [
+  {
+    text: "Nothing short of groundbreaking for designers. It immediately changes how i work and make 10x more productive as an interior designer",
+    author: "@ransegall",
+    role: "Interior Designer",
+  },
+  {
+    text: "This helped me organize my onboarding flow in a day. Earlier it used to take me a full week of back and forth.",
+    author: "@sarahk",
+    role: "Product Designer",
+  },
+  {
+    text: "The biggest win is speed. I can now focus on client work instead of spending time managing repetitive tasks.",
+    author: "@michaelr",
+    role: "Design Lead",
+  },
+];
+
+function renderTestimonial(index) {
+  if (!testimonialText || !testimonialAuthor || !testimonialRole || !testimonialDots) return;
+  const activeTestimonial = testimonials[index];
+  testimonialText.textContent = activeTestimonial.text;
+  testimonialAuthor.textContent = activeTestimonial.author;
+  testimonialRole.textContent = activeTestimonial.role;
+
+  const allDots = testimonialDots.querySelectorAll(".testimonial-dot");
+  allDots.forEach((dot, dotIndex) => {
+    dot.classList.toggle("active", dotIndex === index);
+  });
+}
+
+if (testimonialDots) {
+  testimonials.forEach((_, index) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "testimonial-dot";
+    dot.setAttribute("aria-label", `Show testimonial ${index + 1}`);
+    dot.addEventListener("click", () => renderTestimonial(index));
+    testimonialDots.appendChild(dot);
+  });
+  renderTestimonial(0);
+}
+
 signUpForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  errorTextContainer[4].style.display = 'none'
+  if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = 'none'
   passwordWrapper.classList.remove("error-state");
 
   const { name, email, password, phone, countryCode } = userData
@@ -488,14 +524,14 @@ signUpForm.addEventListener("submit", (event) => {
 
   if (!password){
     passwordWrapper.classList.add("error-state");
-    errorTextContainer[4].style.display = 'flex'
+    if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = 'flex'
     return;
   }
 
   if (!(isLengthValid && hasUpperAndLowerCase && hasNumber && hasSpecial)){ 
     passwordWrapper.classList.add("error-state");
     errMessage.innerHTML = '*Invalid password'
-    errorTextContainer[4].style.display = 'flex'
+    if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = 'flex'
     return;
   }
 
