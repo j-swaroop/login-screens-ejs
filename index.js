@@ -45,6 +45,41 @@ app.post('/auth/forgot-password/', (req, res) => {
     });
 });
 
+app.get('/reset-password', (req, res) => {
+    res.render('resetpassword.ejs', {
+        token: req.query.token || '',
+        message: '',
+        passwordUpdated: false
+    });
+});
+
+app.post('/auth/reset-password/', (req, res) => {
+    const { token = '', newPassword = '', confirmPassword = '' } = req.body;
+
+    if (!newPassword || newPassword.length < 6) {
+        return res.render('resetpassword.ejs', {
+            token,
+            message: 'Password must be at least 6 characters.',
+            passwordUpdated: false
+        });
+    }
+
+    if (newPassword !== confirmPassword) {
+        return res.render('resetpassword.ejs', {
+            token,
+            message: 'Passwords do not match.',
+            passwordUpdated: false
+        });
+    }
+
+    // Demo-only: in a real app you'd verify token + update password
+    return res.render('resetpassword.ejs', {
+        token,
+        message: '',
+        passwordUpdated: true
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
