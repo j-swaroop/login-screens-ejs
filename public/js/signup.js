@@ -98,12 +98,11 @@ function hideErrorMessages(){
 
 }
 
-// usernameField.addEventListener("input", (e) => {
-//   let value = e.target.value;
-//   userData.name = value;
-
-//   hideErrorMessages()
-// });
+usernameField?.addEventListener("input", (e) => {
+  const value = e.target.value;
+  userData.name = value;
+  hideErrorMessages();
+});
 
 emailField.addEventListener("input", (e) => {
   let value = e.target.value;
@@ -174,14 +173,16 @@ passwordField.addEventListener("input", (e) => {
   updateValidation("special", hasSpecial);
   updateValidation("number", hasNumber);
 
-  if (isLengthValid && hasUpperAndLowerCase && hasNumber && hasSpecial) {
-    tooltipWrapper.style.display = 'none'
-    isPasswordValid = true
-  } else {
-    tooltipWrapper.style.display = 'block'
-    isPasswordValid = false
-  }
+  isPasswordValid = isLengthValid && hasUpperAndLowerCase && hasNumber && hasSpecial;
 
+});
+
+passwordField.addEventListener("focus", () => {
+  if (tooltipWrapper) tooltipWrapper.style.display = "block";
+});
+
+passwordField.addEventListener("blur", () => {
+  if (tooltipWrapper) tooltipWrapper.style.display = "none";
 });
 
 
@@ -373,7 +374,9 @@ function toggleSectionOneOrTwo(){
     currentStepWrapper.children[1].classList.add('active-step');
     currentStepWrapper.children[0].classList.add('active-step');
     backButton.classList.remove('hide-content')
-    titleUsername.innerHTML = `Welcome ${userData.name}`
+    if (titleUsername) {
+      titleUsername.innerHTML = `Welcome ${userData.name}`;
+    }
   }else{
     sectionOne[0].classList.remove('hide-content')
     sectionTwo[0].classList.add('hide-content')
@@ -394,6 +397,7 @@ function validateStepOne(){
   }
 
   const { email, password } = userData
+  userNameWrapper?.classList.remove("error-state");
   emailWrapper.classList.remove("error-state");
   passwordWrapper.classList.remove("error-state");
 
@@ -401,6 +405,12 @@ function validateStepOne(){
     el.style.display = "none";
   });
   if (passwordErrorTextContainer) passwordErrorTextContainer.style.display = "none";
+
+  if (!userData.name.trim()) {
+    errorTextContainer[0].style.display = "flex";
+    userNameWrapper?.classList.add("error-state");
+    return;
+  }
 
   if (!email.trim()) {
     errorTextContainer[1].style.display = "flex";
@@ -485,17 +495,38 @@ const testimonials = [
   },
 ];
 
+let currentTestimonialIndex = 0;
+let testimonialIntervalId;
+
 function renderTestimonial(index) {
   if (!testimonialText || !testimonialAuthor || !testimonialRole || !testimonialDots) return;
-  const activeTestimonial = testimonials[index];
-  testimonialText.textContent = activeTestimonial.text;
-  testimonialAuthor.textContent = activeTestimonial.author;
-  testimonialRole.textContent = activeTestimonial.role;
+  testimonialText.classList.add("is-fading");
+  testimonialAuthor.classList.add("is-fading");
+  testimonialRole.classList.add("is-fading");
 
-  const allDots = testimonialDots.querySelectorAll(".testimonial-dot");
-  allDots.forEach((dot, dotIndex) => {
-    dot.classList.toggle("active", dotIndex === index);
-  });
+  setTimeout(() => {
+    const activeTestimonial = testimonials[index];
+    testimonialText.textContent = activeTestimonial.text;
+    testimonialAuthor.textContent = activeTestimonial.author;
+    testimonialRole.textContent = activeTestimonial.role;
+
+    const allDots = testimonialDots.querySelectorAll(".testimonial-dot");
+    allDots.forEach((dot, dotIndex) => {
+      dot.classList.toggle("active", dotIndex === index);
+    });
+
+    testimonialText.classList.remove("is-fading");
+    testimonialAuthor.classList.remove("is-fading");
+    testimonialRole.classList.remove("is-fading");
+  }, 220);
+}
+
+function startTestimonialSlider() {
+  if (testimonialIntervalId) clearInterval(testimonialIntervalId);
+  testimonialIntervalId = setInterval(() => {
+    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+    renderTestimonial(currentTestimonialIndex);
+  }, 2000);
 }
 
 if (testimonialDots) {
@@ -504,10 +535,15 @@ if (testimonialDots) {
     dot.type = "button";
     dot.className = "testimonial-dot";
     dot.setAttribute("aria-label", `Show testimonial ${index + 1}`);
-    dot.addEventListener("click", () => renderTestimonial(index));
+    dot.addEventListener("click", () => {
+      currentTestimonialIndex = index;
+      renderTestimonial(currentTestimonialIndex);
+      startTestimonialSlider();
+    });
     testimonialDots.appendChild(dot);
   });
-  renderTestimonial(0);
+  renderTestimonial(currentTestimonialIndex);
+  startTestimonialSlider();
 }
 
 signUpForm.addEventListener("submit", (event) => {
