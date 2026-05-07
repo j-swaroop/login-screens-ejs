@@ -123,7 +123,7 @@ body {
   width: 150%;
   bottom: -12.5rem;
   height: 14rem;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   background: linear-gradient(90deg, #c0d7e2 0%, #c0d7e2 20%, rgba(255, 187, 84, 0.75) 38%, rgba(255, 187, 84, 0.75) 62%, #b5c9d5 80%, #b5c9d5 100%);
   filter: blur(124.9289550781px);
@@ -132,7 +132,6 @@ body {
 }
 .default-page-wrapper .default-page-content-wrapper {
   position: relative;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,12 +142,15 @@ body {
   position: absolute;
   top: 1.25rem;
   left: 1.25rem;
+  z-index: 3;
 }
 .default-page-wrapper .default-page-content-wrapper .header .app-logo-wrapper {
   flex-shrink: 0;
 }
 .default-page-wrapper .default-page-content-wrapper .left-section {
   width: 50%;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   height: 100%;
@@ -327,23 +329,40 @@ body {
 }
 .default-page-wrapper .default-page-content-wrapper .right-section {
   height: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 50%;
   flex-shrink: 0;
 }
-.default-page-wrapper .default-page-content-wrapper .right-section .right-section-img-wrapper {
-  background: #7291E8;
-  box-shadow: 4px 0px 20px 0px rgba(65, 105, 225, 0.1) inset;
-  height: 100%;
-  width: 100%;
+.default-page-wrapper .default-page-content-wrapper .right-section .login-slider-wrapper {
+  display: flex;
+  width: 52%;
+  height: 82%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  position: relative;
+  z-index: -1;
+  overflow: hidden;
+  margin-top: auto;
+  margin-bottom: 1rem;
 }
-.default-page-wrapper .default-page-content-wrapper .right-section .right-section-img-wrapper img {
+.default-page-wrapper .default-page-content-wrapper .right-section .login-slider-wrapper .login-slide {
   height: 100%;
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: left;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+  z-index: -1;
+}
+.default-page-wrapper .default-page-content-wrapper .right-section .login-slider-wrapper .login-slide.is-active {
+  opacity: 1;
+  z-index: 0;
 }
 .default-page-wrapper .default-page-content-wrapper .right-section .right-section-testimonials-card-wrapper {
   display: flex;
@@ -748,6 +767,7 @@ input.error-state:focus {
   font-style: normal;
   font-weight: 500;
   line-height: 1rem; /* 114.286% */
+  background: transparent;
 }
 .input-wrapper .input-field input::placeholder {
   flex: 1 0 0;
@@ -981,10 +1001,6 @@ input.error-state:focus {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url("../assets/Group (2).png"), url("../assets/Group (1).png");
-    background-position: top right, bottom center;
-    background-repeat: no-repeat, no-repeat;
-    background-size: 100% 50%, 100% 50%;
   }
   .default-page-wrapper .default-page-content-wrapper {
     flex-direction: column;

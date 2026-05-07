@@ -64,7 +64,7 @@ body {
     width: 150%;
     bottom: -12.5rem;
     height: 14rem;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
     background: linear-gradient(
       90deg,
@@ -82,7 +82,6 @@ body {
 
   .default-page-content-wrapper {
     position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,6 +93,7 @@ body {
       position: absolute;
       top: 1.25rem;
       left: 1.25rem;
+      z-index: 3;
       .app-logo-wrapper {
         // max-width: 5.6875rem;
         // max-height: 1.875rem;
@@ -102,6 +102,8 @@ body {
     }
     .left-section {
       width: 50%;
+      position: relative;
+      z-index: 1;
       // width: 35.5rem;
       display: flex;
       align-items: center;
@@ -293,6 +295,7 @@ body {
     }
     .right-section {
       height: 100%;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -301,17 +304,36 @@ body {
       width: 50%;
       flex-shrink: 0;
 
-      .right-section-img-wrapper {
-        background: $background-34;
-        box-shadow: 4px 0px 20px 0px rgba(65, 105, 225, 0.1) inset;
-        height: 100%;
-        width: 100%;
+      .login-slider-wrapper {
+        // background: $background-34;
+        // box-shadow: 4px 0px 20px 0px rgba(65, 105, 225, 0.1) inset;
+        display: flex;
+        width: 52%;
+        height: 82%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .5rem;
+        position: relative;
+        z-index: -1;
+        overflow: hidden;
+        margin-top: auto;
+        margin-bottom: 1rem;
         // width: 48rem;
-        img {
+        .login-slide {
           height: 100%;
           width: 100%;
-          object-fit: cover;
+          object-fit: contain;
           object-position: left;
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transition: opacity 0.6s ease-in-out;
+          z-index: -1;
+        }
+
+        .login-slide.is-active {
+          opacity: 1;
+          z-index: 0;
         }
       }
 
@@ -753,6 +775,7 @@ input.error-state:focus {
       font-style: normal;
       font-weight: 500;
       line-height: 1rem; /* 114.286% */
+      background: transparent;
       &::placeholder {
         flex: 1 0 0;
         color: $color-19;
@@ -1025,16 +1048,16 @@ input.error-state:focus {
     align-items: center;
     justify-content: center;
     // background: $background-6;
-    background-image:
-      url("../assets/Group\ \(2\).png"), url("../assets/Group\ \(1\).png");
-    background-position:
-      top right,
-      bottom center;
-    background-repeat: no-repeat, no-repeat;
+    // background-image:
+    //   url("../assets/Group\ \(2\).png"), url("../assets/Group\ \(1\).png");
+    // background-position:
+    //   top right,
+    //   bottom center;
+    // background-repeat: no-repeat, no-repeat;
     // background-size: cover, cover;
-    background-size:
-      100% 50%,
-      100% 50%;
+    // background-size:
+    //   100% 50%,
+    //   100% 50%;
     .default-page-content-wrapper {
       flex-direction: column;
       // width: 100%;

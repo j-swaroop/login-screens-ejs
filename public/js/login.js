@@ -32,6 +32,23 @@ const dropdownDownArrow = document.querySelector("#dropdownDownArrow");
 const passwordError = document.querySelector("#passwordError");
 const emailError = document.querySelector("#emailError");
 
+(() => {
+  const slider = document.getElementById("loginImageSlider");
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll(".login-slide");
+  if (slides.length <= 1) return;
+
+  let currentIndex = 0;
+  const slideDurationMs = 3000;
+
+  setInterval(() => {
+    slides[currentIndex].classList.remove("is-active");
+    currentIndex = (currentIndex + 1) % slides.length;
+    slides[currentIndex].classList.add("is-active");
+  }, slideDurationMs);
+})();
+
 let isPasswordVisible = false;
 let searchValue = "";
 let debounceTimeout;
