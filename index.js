@@ -22,6 +22,29 @@ app.get('/signup', (req, res) => {
     res.render('signup.ejs'); 
 });
 
+app.get('/forgot-password', (req, res) => {
+    res.render('forgotpassword.ejs', {
+        message: '',
+        uuid: '',
+        clientId: '',
+        emailOrPhone: '',
+        countryCode: '+91'
+    });
+});
+
+app.post('/auth/forgot-password/', (req, res) => {
+    const emailOrPhone = req.body.contactNumber || req.body.email || '';
+    const countryCode = req.body.countryCode || '+91';
+
+    res.render('forgotpassword.ejs', {
+        message: 'If this account exists, a reset link has been sent.',
+        uuid: req.body.interactionId || '',
+        clientId: req.body.clientId || '',
+        emailOrPhone,
+        countryCode
+    });
+});
+
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
