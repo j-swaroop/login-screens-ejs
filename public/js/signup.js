@@ -49,6 +49,8 @@ const currentStepWrapper = document.querySelector('.current-step-wrapper');
 const stepOneButton = document.querySelector('#stepOneButton');
 const titleUsername = document.querySelector('.title-username')
 const loginViaOptionWrapper = document.querySelector('.login-via-option-wrapper');
+const logoWrapper = document.querySelector(".signup-right-section .logo-wrapper");
+const logoText = logoWrapper?.querySelector(".logo-text");
 
 // Simple testimonial carousel with dot navigation
 const testimonialText = document.getElementById("testimonialText");
@@ -69,6 +71,29 @@ let userData = {
 let isPasswordValid = false
 let searchValue = "";
 let debounceTimeout;
+
+function getNameInitials(nameValue) {
+  if (!nameValue) return "";
+  const words = nameValue
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (!words.length) return "";
+
+  return words
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("")
+    .slice(0, 2);
+}
+
+function updateLogoFromName(nameValue) {
+  if (!logoWrapper || !logoText) return;
+
+  const initials = getNameInitials(nameValue);
+  logoText.textContent = initials;
+  logoWrapper.classList.toggle("is-visible", Boolean(initials));
+}
 
 if (emailField.value){
   userData.email = emailField.value 
@@ -101,8 +126,11 @@ function hideErrorMessages(){
 usernameField?.addEventListener("input", (e) => {
   const value = e.target.value;
   userData.name = value;
+  updateLogoFromName(value);
   hideErrorMessages();
 });
+
+updateLogoFromName(usernameField?.value || "");
 
 emailField.addEventListener("input", (e) => {
   let value = e.target.value;
