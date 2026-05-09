@@ -1203,5 +1203,29 @@ input.error-state:focus {
     transform: rotate(45deg);
   }
 }
+@media screen and (min-width: 769px) and (max-width: 1440px) {
+  .default-page-wrapper .default-page-content-wrapper .left-section .left-section-content-wrapper {
+    padding-bottom: 0;
+  }
+  .default-page-wrapper .default-page-content-wrapper .left-section .left-section-content-wrapper .sign-up-form-wrapper {
+    gap: 1rem;
+  }
+  .default-page-wrapper .default-page-content-wrapper .left-section .left-section-content-wrapper .sign-up-form-wrapper .title-section-signup .create-account-title {
+    font-size: 1.25rem;
+  }
+  .default-page-wrapper .default-page-content-wrapper .left-section .left-section-content-wrapper .sign-up-form-wrapper .title-section-signup .title-subtitle {
+    font-size: 0.625rem;
+  }
+  .default-page-wrapper .default-page-content-wrapper .input-wrapper .input-field input {
+    padding: 0.625rem 0.75rem;
+  }
+  .default-page-wrapper .default-page-content-wrapper .login-via-option-wrapper {
+    gap: 0.75rem;
+  }
+  .default-page-wrapper .default-page-content-wrapper .login-via-option-wrapper .oauth-buttons-wrapper .oauth-button {
+    padding: 0.375rem 1rem;
+    border-radius: 0.5rem;
+  }
+}
 
 /*# sourceMappingURL=style.css.map */

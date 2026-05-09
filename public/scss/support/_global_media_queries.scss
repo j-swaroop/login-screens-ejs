@@ -10,6 +10,12 @@
     }
 }
 
+@mixin tab_and_small_desktop() {
+    @media screen and (min-width: 769px) and (max-width: 1440px) {
+        @content;
+    }
+}
+
 // @mixin custom-min($breakpoint) {
 //     @media (min-width: #{$breakpoint}) {
 //         @content;

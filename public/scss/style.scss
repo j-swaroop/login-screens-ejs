@@ -1310,3 +1310,43 @@ input.error-state:focus {
     }
   }
 }
+
+@include tab_and_small_desktop {
+  .default-page-wrapper {
+    .default-page-content-wrapper {
+      .left-section{
+        .left-section-content-wrapper{
+          padding-bottom: 0;
+          .sign-up-form-wrapper{
+            gap: 1rem;
+           .title-section-signup{
+            .create-account-title{
+              font-size: 1.25rem;
+            }
+            .title-subtitle{
+              font-size: .625rem;
+            }
+           }
+          }
+        }
+      }
+
+      .input-wrapper{
+        .input-field{
+          input{
+            padding: .625rem .75rem;
+          }
+        }
+      }
+      .login-via-option-wrapper{
+        gap: .75rem;
+        .oauth-buttons-wrapper{
+          .oauth-button{
+            padding: .375rem 1rem;
+            border-radius: .5rem;
+          }
+        }
+      }
+    }
+  }
+}
